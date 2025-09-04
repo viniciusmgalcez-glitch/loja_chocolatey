@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChocoWeb Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Cool Slate & Sky -->
+    <!-- Application Structure Plan: The application is designed as a single-page dashboard/storefront. The structure consists of a header with a search bar, a sidebar for category filtering, and a main content grid displaying application cards. This familiar app store layout was chosen for its high usability and intuitive user flow. Users can immediately search or filter to find apps. Clicking an app opens a modal for details and the installation command, which avoids page reloads and keeps the user in the main browsing context. This structure makes finding and getting install commands fast and efficient. -->
+    <!-- Visualization & Content Choices: The core information is the list of software packages. Goal: Organize and Inform. Presentation: A responsive grid of cards (HTML/Tailwind), which is visually scannable. Interaction: Live search and category filters (JS) dynamically update the grid. A modal (JS toggled) displays app details and the install command. The 'Copy Command' button simplifies the core user task. Goal: Action. Justification: This interactive approach is more engaging and efficient than a static list, directly supporting the user's goal of quickly finding and installing software. No charts are needed as the data is categorical, not quantitative. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .modal-overlay {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+        .app-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .category-btn.active {
+            background-color: #0284c7;
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div id="app" class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold text-sky-700 mb-2">ChocoWeb Store</h1>
+            <p class="text-slate-500 max-w-2xl mx-auto">Uma interface web amigável para navegar e encontrar pacotes do <a href="https://chocolatey.org/" target="_blank" class="text-sky-600 hover:underline">Chocolatey</a>.</p>
+        </header>
+        
+        <div class="sticky top-0 z-20 bg-slate-50/80 backdrop-blur-sm py-4 mb-8">
+             <div class="relative max-w-3xl mx-auto">
+                <input type="text" id="search-input" placeholder="Pesquisar aplicativos (ex: vscode, git...)" class="w-full p-4 pl-12 border border-slate-300 rounded-full shadow-sm focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-4">
+                    <span class="text-slate-400">🔍</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+            <aside class="lg:w-1/4 xl:w-1/5">
+                <h2 class="text-xl font-semibold mb-4 border-b pb-2">Categorias</h2>
+                <div id="category-filters" class="flex flex-wrap lg:flex-col gap-2">
+                </div>
+            </aside>
+
+            <main class="lg:w-3/4 xl:w-4/5">
+                 <div id="no-results" class="hidden text-center py-16">
+                    <p class="text-2xl font-semibold text-slate-600">Nenhum aplicativo encontrado</p>
+                    <p class="text-slate-500 mt-2">Tente ajustar sua busca ou filtro.</p>
+                </div>
+                <div id="app-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="app-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+        <div class="modal-content bg-white w-full max-w-2xl rounded-2xl shadow-2xl p-8 relative transform scale-95">
+            <button id="close-modal-btn" class="absolute top-4 right-4 text-slate-500 hover:text-slate-800 text-2xl">&times;</button>
+            <div id="modal-body" class="flex flex-col sm:flex-row gap-8">
+            </div>
+        </div>
+    </div>
+    
+    <div id="copy-notification" class="fixed bottom-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transition-opacity duration-300">
+        Comando copiado!
+    </div>
+
+
+    <script>
+        const packages = [
+            { id: "vscode", name: "Visual Studio Code", category: "Desenvolvimento", version: "1.90.2", description: "Editor de código fonte leve mas poderoso que roda em seu desktop e está disponível para Windows, macOS e Linux.", icon: "💻" },
+            { id: "googlechrome", name: "Google Chrome", category: "Navegadores", version: "126.0", description: "Um navegador web rápido, simples e seguro, construído para a web moderna.", icon: "🌐" },
+            { id: "7zip", name: "7-Zip", category: "Utilitários", version: "24.05", description: "Um arquivador de arquivos com alta taxa de compressão. Suporta múltiplos formatos.", icon: "🗜️" },
+            { id: "vlc", name: "VLC Media Player", category: "Mídia", version: "3.0.20", description: "Um reprodutor de mídia multiplataforma gratuito e de código aberto que reproduz a maioria dos arquivos multimídia.", icon: "▶️" },
+            { id: "git", name: "Git", category: "Desenvolvimento", version: "2.44.0", description: "Sistema de controle de versão distribuído, gratuito e de código aberto, projetado para lidar com tudo, desde projetos pequenos a muito grandes, com velocidade e eficiência.", icon: "🌿" },
+            { id: "nodejs", name: "Node.js", category: "Desenvolvimento", version: "20.11.1", description: "Um ambiente de execução JavaScript construído no motor JavaScript V8 do Chrome.", icon: "🚀" },
+            { id: "python", name: "Python 3", category: "Desenvolvimento", version: "3.12.2", description: "Uma linguagem de programação que permite trabalhar rapidamente e integrar sistemas de forma mais eficaz.", icon: "🐍" },
+            { id: "docker-desktop", name: "Docker Desktop", category: "Desenvolvimento", version: "4.28.0", description: "A maneira mais rápida de containerizar aplicações em seu desktop.", icon: "🐳" },
+            { id: "spotify", name: "Spotify", category: "Mídia", version: "1.2.35", description: "Um serviço de streaming de música digital que dá acesso a milhões de músicas.", icon: "🎵" },
+            { id: "discord", name: "Discord", category: "Comunicação", version: "1.0.9033", description: "Software de VoIP e plataforma de distribuição digital projetado para criar comunidades.", icon: "💬" },
+            { id: "obs-studio", name: "OBS Studio", category: "Mídia", version: "30.1.2", description: "Software gratuito e de código aberto para gravação de vídeo e transmissão ao vivo.", icon: "🔴" },
+            { id: "powertoys", name: "PowerToys", category: "Utilitários", version: "0.80.1", description: "Um conjunto de utilitários para usuários avançados ajustarem e otimizarem sua experiência no Windows.", icon: "🛠️" },
+            { id: "firefox", name: "Firefox", category: "Navegadores", version: "127.0", description: "Um navegador web gratuito e de código aberto desenvolvido pela Mozilla Foundation.", icon: "🦊" },
+            { id: "gimp", name: "GIMP", category: "Mídia", version: "2.10.36", description: "Editor de imagens de código aberto para manipulação de fotos, composição de imagens e autoria de imagens.", icon: "🎨" },
+            { id: "postman", name: "Postman", category: "Desenvolvimento", version: "10.24.15", description: "A plataforma de colaboração para desenvolvimento de API. Simplifica cada passo do ciclo de vida da API.", icon: "📨" },
+            { id: "notepadplusplus", name: "Notepad++", category: "Utilitários", version: "8.6.5", description: "Um editor de texto e código fonte gratuito que suporta várias linguagens.", icon: "📝" },
+            { id: "slack", name: "Slack", category: "Comunicação", version: "4.37.101", description: "Uma plataforma de mensagens baseada em canais. Lugares para todos, informações e ferramentas que você precisa para fazer o trabalho.", icon: "🤝" },
+            { id: "autohotkey", name: "AutoHotkey", category: "Utilitários", version: "2.0.13", description: "Uma linguagem de script gratuita e de código aberto para Windows que permite aos usuários automatizar tarefas repetitivas.", icon: "🤖" }
+        ];
+
+        const appGrid = document.getElementById('app-grid');
+        const searchInput = document.getElementById('search-input');
+        const categoryFiltersContainer = document.getElementById('category-filters');
+        const noResults = document.getElementById('no-results');
+        
+        const appModal = document.getElementById('app-modal');
+        const modalBody = document.getElementById('modal-body');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const copyNotification = document.getElementById('copy-notification');
+
+        const renderPackages = (packageList) => {
+            appGrid.innerHTML = '';
+            if (packageList.length === 0) {
+                appGrid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+            } else {
+                appGrid.classList.remove('hidden');
+                noResults.classList.add('hidden');
+                packageList.forEach(pkg => {
+                    const card = document.createElement('div');
+                    card.className = 'app-card bg-white p-6 rounded-xl border border-slate-200 flex flex-col items-center text-center cursor-pointer';
+                    card.dataset.id = pkg.id;
+                    card.innerHTML = `
+                        <div class="text-5xl mb-4">${pkg.icon}</div>
+                        <h3 class="text-lg font-semibold text-slate-900">${pkg.name}</h3>
+                        <p class="text-sm text-slate-500">${pkg.category}</p>
+                    `;
+                    appGrid.appendChild(card);
+                });
+            }
+        };
+
+        const setupCategories = () => {
+            const categories = ['Todos', ...new Set(packages.map(p => p.category))];
+            categoryFiltersContainer.innerHTML = '';
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-btn text-left w-full lg:w-auto text-slate-600 hover:bg-sky-100 hover:text-sky-800 px-4 py-2 rounded-lg transition';
+                if(category === 'Todos') {
+                    button.classList.add('active');
+                }
+                button.textContent = category;
+                button.dataset.category = category;
+                categoryFiltersContainer.appendChild(button);
+            });
+        };
+        
+        const filterAndRender = () => {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('.category-btn.active').dataset.category;
+            
+            const filteredPackages = packages.filter(pkg => {
+                const matchesSearch = pkg.name.toLowerCase().includes(searchTerm) || pkg.id.toLowerCase().includes(searchTerm);
+                const matchesCategory = activeCategory === 'Todos' || pkg.category === activeCategory;
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderPackages(filteredPackages);
+        };
+        
+        const showModal = (pkg) => {
+            modalBody.innerHTML = `
+                 <div class="flex-shrink-0 text-8xl text-center sm:text-left">${pkg.icon}</div>
+                 <div>
+                    <h2 class="text-3xl font-bold text-slate-900 mb-1">${pkg.name}</h2>
+                    <p class="text-sm text-slate-500 mb-4">Versão ${pkg.version} | Categoria: ${pkg.category}</p>
+                    <p class="text-slate-600 mb-6">${pkg.description}</p>
+                    <div class="bg-slate-100 p-4 rounded-lg">
+                        <p class="text-sm text-slate-600 mb-2">Para instalar, execute no seu terminal:</p>
+                        <div class="flex items-center gap-2">
+                            <input id="install-command" type="text" readonly value="choco install ${pkg.id}" class="flex-grow bg-slate-200 text-slate-800 font-mono p-2 rounded-md outline-none">
+                            <button id="copy-btn" class="bg-sky-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-sky-700 transition">Copiar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            appModal.classList.remove('hidden');
+            setTimeout(() => {
+                appModal.querySelector('.modal-content').classList.remove('scale-95');
+                appModal.classList.remove('opacity-0');
+            }, 10);
+            
+            document.getElementById('copy-btn').addEventListener('click', () => {
+                const commandInput = document.getElementById('install-command');
+                commandInput.select();
+                commandInput.setSelectionRange(0, 99999);
+                try {
+                    document.execCommand('copy');
+                    showCopyNotification();
+                } catch(err) {
+                    console.error('Falha ao copiar comando: ', err);
+                }
+            });
+        };
+
+        const showCopyNotification = () => {
+            copyNotification.classList.remove('opacity-0');
+            setTimeout(() => {
+                copyNotification.classList.add('opacity-0');
+            }, 2000);
+        };
+        
+        const hideModal = () => {
+            appModal.querySelector('.modal-content').classList.add('scale-95');
+            appModal.classList.add('opacity-0');
+            setTimeout(() => {
+                appModal.classList.add('hidden');
+            }, 300);
+        };
+        
+        searchInput.addEventListener('keyup', filterAndRender);
+        
+        categoryFiltersContainer.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                document.querySelector('.category-btn.active').classList.remove('active');
+                e.target.classList.add('active');
+                filterAndRender();
+            }
+        });
+
+        appGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.app-card');
+            if (card) {
+                const pkgId = card.dataset.id;
+                const selectedPkg = packages.find(p => p.id === pkgId);
+                showModal(selectedPkg);
+            }
+        });
+        
+        closeModalBtn.addEventListener('click', hideModal);
+        
+        appModal.addEventListener('click', (e) => {
+            if(e.target === appModal) {
+                hideModal();
+            }
+        });
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape" && !appModal.classList.contains('hidden')) {
+                hideModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupCategories();
+            renderPackages(packages);
+        });
+    </script>
+</body>
+</html>
