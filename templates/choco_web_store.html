@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChocoWeb Store</title>
+    <title>ChocoWeb da Cabra Montanhesa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chosen Palette: Cool Slate & Sky -->
-    <!-- Application Structure Plan: The application is designed as a single-page dashboard/storefront. The structure consists of a header with a search bar, a sidebar for category filtering, and a main content grid displaying application cards. This familiar app store layout was chosen for its high usability and intuitive user flow. Users can immediately search or filter to find apps. Clicking an app opens a modal for details and the installation command, which avoids page reloads and keeps the user in the main browsing context. This structure makes finding and getting install commands fast and efficient. -->
-    <!-- Visualization & Content Choices: The core information is the list of software packages. Goal: Organize and Inform. Presentation: A responsive grid of cards (HTML/Tailwind), which is visually scannable. Interaction: Live search and category filters (JS) dynamically update the grid. A modal (JS toggled) displays app details and the install command. The 'Copy Command' button simplifies the core user task. Goal: Action. Justification: This interactive approach is more engaging and efficient than a static list, directly supporting the user's goal of quickly finding and installing software. No charts are needed as the data is categorical, not quantitative. -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
             font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-800 */
         }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         .modal-overlay {
@@ -22,15 +20,48 @@
         }
         .app-card {
             transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            background-color: #ffffff; /* white */
+            border: 1px solid #e2e8f0; /* slate-200 */
         }
         .app-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
         }
+        .category-btn {
+            color: #475569; /* slate-600 */
+            background-color: #f1f5f9; /* slate-100 */
+        }
+        .category-btn:hover {
+            background-color: #e0f2fe; /* sky-100 */
+            color: #0c4a6e; /* sky-800 */
+        }
         .category-btn.active {
-            background-color: #0284c7;
+            background-color: #0284c7; /* sky-600 */
             color: white;
             font-weight: 600;
+        }
+        /* Custom styles for the header to align logo and text */
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center horizontally */
+            gap: 1rem; /* Space between logo and title */
+        }
+        .header-content img {
+            height: 60px; /* Adjust size as needed */
+            width: 60px;
+        }
+        @media (min-width: 640px) { /* Small screens and up */
+            .header-content img {
+                height: 70px;
+                width: 70px;
+            }
+        }
+        @media (min-width: 1024px) { /* Large screens and up */
+            .header-content img {
+                height: 80px;
+                width: 80px;
+            }
         }
     </style>
 </head>
@@ -39,8 +70,12 @@
     <div id="app" class="container mx-auto p-4 sm:p-6 lg:p-8">
         
         <header class="text-center mb-8">
-            <h1 class="text-4xl sm:text-5xl font-bold text-sky-700 mb-2">ChocoWeb Store</h1>
-            <p class="text-slate-500 max-w-2xl mx-auto">Uma interface web amigável para navegar e encontrar pacotes do <a href="https://chocolatey.org/" target="_blank" class="text-sky-600 hover:underline">Chocolatey</a>.</p>
+            <div class="header-content">
+                <img src="https://i.imgur.com/G3Xm8q1.png" alt="Logo ChocoWeb Capricórnio">
+                <h1 class="text-4xl sm:text-5xl font-bold text-sky-700">ChocoWeb da Cabra Montanhesa</h1>
+            </div>
+            <p class="text-slate-500 max-w-2xl mx-auto mt-2">Sua fonte de softwares confiáveis, com a resiliência e a ambição de Capricórnio.</p>
+            <p class="text-slate-500 max-w-2xl mx-auto">Explore pacotes do <a href="https://chocolatey.org/" target="_blank" class="text-sky-600 hover:underline">Chocolatey</a> de forma fácil e eficiente.</p>
         </header>
         
         <div class="sticky top-0 z-20 bg-slate-50/80 backdrop-blur-sm py-4 mb-8">
@@ -87,7 +122,7 @@
         const packages = [
             { id: "vscode", name: "Visual Studio Code", category: "Desenvolvimento", version: "1.90.2", description: "Editor de código fonte leve mas poderoso que roda em seu desktop e está disponível para Windows, macOS e Linux.", icon: "💻" },
             { id: "googlechrome", name: "Google Chrome", category: "Navegadores", version: "126.0", description: "Um navegador web rápido, simples e seguro, construído para a web moderna.", icon: "🌐" },
-            { id: "7zip", name: "7-Zip", category: "Utilitários", version: "24.05", description: "Um arquivador de arquivos com alta taxa de compressão. Suporta múltiplos formatos.", icon: "🗜️" },
+            { id: "7zip", name: "7-Zip", category: "Utilitários", version: "24.05", description: "Um arquivador de arquivos com alta taxa de compressão. Suporta múltiplos formatos.", icon: "�️" },
             { id: "vlc", name: "VLC Media Player", category: "Mídia", version: "3.0.20", description: "Um reprodutor de mídia multiplataforma gratuito e de código aberto que reproduz a maioria dos arquivos multimídia.", icon: "▶️" },
             { id: "git", name: "Git", category: "Desenvolvimento", version: "2.44.0", description: "Sistema de controle de versão distribuído, gratuito e de código aberto, projetado para lidar com tudo, desde projetos pequenos a muito grandes, com velocidade e eficiência.", icon: "🌿" },
             { id: "nodejs", name: "Node.js", category: "Desenvolvimento", version: "20.11.1", description: "Um ambiente de execução JavaScript construído no motor JavaScript V8 do Chrome.", icon: "🚀" },
@@ -142,7 +177,7 @@
             categoryFiltersContainer.innerHTML = '';
             categories.forEach(category => {
                 const button = document.createElement('button');
-                button.className = 'category-btn text-left w-full lg:w-auto text-slate-600 hover:bg-sky-100 hover:text-sky-800 px-4 py-2 rounded-lg transition';
+                button.className = 'category-btn text-left w-full lg:w-auto px-4 py-2 rounded-lg transition';
                 if(category === 'Todos') {
                     button.classList.add('active');
                 }
@@ -255,3 +290,4 @@
     </script>
 </body>
 </html>
+�
