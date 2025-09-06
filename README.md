@@ -1,5 +1,17 @@
-🍫 Loja de Pacotes Chocolatey com Flask
-Bem-vindo ao repositório do projeto, uma interface web para gerenciar e visualizar pacotes do Chocolatey, o gerenciador de pacotes para Windows.
+<div align="center">
+<h1>🍫 Loja de Pacotes Chocolatey com Flask</h1>
+<p>Uma vitrine web simples, feita com Flask, para navegar e pesquisar pacotes do Chocolatey.</p>
+
+<p>
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Python-3776AB%3Fstyle%3Dfor-the-badge%26logo%3Dpython%26logoColor%3Dwhite" alt="Badge Python"/>
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Flask-000000%3Fstyle%3Dfor-the-badge%26logo%3Dflask%26logoColor%3Dwhite" alt="Badge Flask"/>
+<img src="https://www.google.com/search?q=https://img.shields.io/badge/Render-46E3B7%3Fstyle%3Dfor-the-badge%26logo%3Drender%26logoColor%3Dwhite" alt="Badge Render"/>
+</p>
+</div>
+
+<div align="center">
+<img src="https://www.google.com/search?q=https://placehold.co/800x400/2d333b/f0f6fc%3Ftext%3DScreenshot%2Bda%2BAplica%C3%A7%C3%A3o" alt="Screenshot da tela inicial da Loja Chocolatey" style="border-radius: 8px;"/>
+</div>
 
 📝 Descrição
 Este projeto é uma aplicação web simples, construída com o micro-framework Python Flask, que serve como uma "loja" ou vitrine para pacotes do Chocolatey. O objetivo é facilitar a busca e a visualização de programas que podem ser instalados no Windows via linha de comando. A aplicação foi desenvolvida pensando na implantação na plataforma Render.
@@ -47,7 +59,7 @@ pip (gerenciador de pacotes do Python)
 Instalação
 Clone o repositório:
 
-git clone https://github.com/viniciusmgalcez-glitch/loja_chocolatey.git
+git clone [https://github.com/viniciusmgalcez-glitch/loja_chocolatey.git](https://github.com/viniciusmgalcez-glitch/loja_chocolatey.git)
 cd loja_chocolatey
 
 Crie e ative um ambiente virtual:
@@ -96,4 +108,6 @@ Abra um Pull Request para que possamos avaliar suas mudanças.
 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
 
-Feito com ❤️ por viniciusmgalcez-glitch.
+<div align="center">
+Feito com ❤️ por <a href="https://www.google.com/search?q=https://github.com/viniciusmgalcez-glitch">viniciusmgalcez-glitch</a>.
+</div>
