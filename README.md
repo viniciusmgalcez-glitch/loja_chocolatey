@@ -3,7 +3,7 @@
 <p>Uma vitrine web simples, feita com Flask, para navegar e pesquisar pacotes do Chocolatey.</p>
 
 <p>
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Python-3776AB%3Fstyle%3Dfor-the-badge%26logo%3Dpython%26logoColor%3Dwhite" alt="Badge Python"/>
+<img src="https://img.icons8.com/?size=100&id=13441&format=png&color=000000" alt="Badge Python"/>
 <img src="https://www.google.com/search?q=https://img.shields.io/badge/Flask-000000%3Fstyle%3Dfor-the-badge%26logo%3Dflask%26logoColor%3Dwhite" alt="Badge Flask"/>
 <img src="https://www.google.com/search?q=https://img.shields.io/badge/Render-46E3B7%3Fstyle%3Dfor-the-badge%26logo%3Drender%26logoColor%3Dwhite" alt="Badge Render"/>
 </p>
