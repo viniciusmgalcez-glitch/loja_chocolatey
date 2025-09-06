@@ -47,7 +47,7 @@ pip (gerenciador de pacotes do Python)
 Instalação
 Clone o repositório:
 
-git clone [https://github.com/viniciusmgalcez-glitch/loja_chocolatey.git](https://github.com/viniciusmgalcez-glitch/loja_chocolatey.git)
+git clone https://github.com/viniciusmgalcez-glitch/loja_chocolatey.git
 cd loja_chocolatey
 
 Crie e ative um ambiente virtual:
