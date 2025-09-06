@@ -9,7 +9,6 @@
 </div>
 
 <div align="center">
-<img src="https://www.google.com/search?q=https://placehold.co/800x400/2d333b/f0f6fc%3Ftext%3DScreenshot%2Bda%2BAplica%C3%A7%C3%A3o" alt="Screenshot da tela inicial da Loja Chocolatey" style="border-radius: 8px;"/>
 </div>
 
 📝 Descrição
