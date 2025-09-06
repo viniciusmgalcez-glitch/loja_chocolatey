@@ -4,8 +4,8 @@
 
 <p>
 <img src="https://img.icons8.com/?size=100&id=13441&format=png&color=000000" alt="Badge Python"/>
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Flask-000000%3Fstyle%3Dfor-the-badge%26logo%3Dflask%26logoColor%3Dwhite" alt="Badge Flask"/>
-<img src="https://www.google.com/search?q=https://img.shields.io/badge/Render-46E3B7%3Fstyle%3Dfor-the-badge%26logo%3Drender%26logoColor%3Dwhite" alt="Badge Render"/>
+<img src="https://img.icons8.com/?size=100&id=MHcMYTljfKOr&format=png&color=000000" alt="Badge Flask"/>
+<img src="https://cdn.pulse2.com/cdn/2025/01/Render-Logo.jpg" alt="Badge Render"/>
 </p>
 </div>
 
