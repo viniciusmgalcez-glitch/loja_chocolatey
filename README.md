@@ -4,8 +4,7 @@
 
 <p>
 <img src="https://img.icons8.com/?size=100&id=13441&format=png&color=000000" alt="Badge Python"/>
-<img src="https://img.icons8.com/?size=100&id=MHcMYTljfKOr&format=png&color=000000" alt="Badge Flask"/>
-<img src="https://cdn.pulse2.com/cdn/2025/01/Render-Logo.jpg" alt="Badge Render"/>
+<img src="https://img.icons8.com/?size=100&id=ewGOClUtmFX4&format=png&color=000000"/>
 </p>
 </div>
 
